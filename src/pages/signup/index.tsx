@@ -48,6 +48,8 @@ export default function SignUp() {
         password: data.password,
       })
       .then((res) => {
+        console.log(res.data);
+
         localStorage.setItem("Access Token", res.data.token);
         alert("회원가입이 완료되었습니다.");
         navigate("/");
@@ -87,9 +89,8 @@ export default function SignUp() {
             placeholder="비밀번호 확인"
             {...register("password_confirm")}
           />
-          <p> {errors.password_confirm?.message} </p>
-
           <button type="submit">회원가입</button>
+          <p> {errors.password_confirm?.message} </p>
         </fieldset>
       </form>
     </>
