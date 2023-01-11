@@ -1,5 +1,7 @@
 import axios from "axios";
+import * as yup from "yup";
 import React from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Nav from "../../common/Nav";
@@ -10,15 +12,36 @@ interface ISignUpForm {
   password_confirm: string;
 }
 
+const formSchema = yup.object({
+  email: yup
+    .string()
+    .required("이메일을 입력해주세요")
+    .email("이메일 형식이 아닙니다."),
+  password: yup
+    .string()
+    .required("영문, 숫자포함 8자리를 입력해주세요.")
+    .min(8, "최소 8자 이상 가능합니다")
+    .max(15, "최대 15자 까지만 가능합니다")
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/,
+      "영문 숫자포함 8자리를 입력해주세요."
+    ),
+  password_confirm: yup
+    .string()
+    .oneOf([yup.ref("password")], "비밀번호가 다릅니다."),
+});
+
 export default function SignUp() {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<ISignUpForm>();
-  const handleSignUp = async (data: any) => {
+  } = useForm<ISignUpForm>({
+    resolver: yupResolver(formSchema),
+  });
+
+  const handleSignUp = async (data: ISignUpForm) => {
     await axios
       .post(`http://localhost:8080/users/create`, {
         email: data.email,
@@ -29,7 +52,7 @@ export default function SignUp() {
         alert("회원가입이 완료되었습니다.");
         navigate("/");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => alert(error.response.data.details));
   };
   return (
     <>
@@ -39,16 +62,10 @@ export default function SignUp() {
           <legend>회원가입</legend>
 
           <label htmlFor="myEmail">email : </label>
-          <input
-            type="email"
-            id="myEmail"
-            {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
-          />
+          <input type="email" id="myEmail" {...register("email")} />
 
-          {errors.email?.type === "required" && <p>이메일을 입력해 주세요!</p>}
-          {errors.email?.type === "validate" && (
-            <p>이메일 형시에 맞게 작성해주세요!</p>
-          )}
+          <p> {errors.email?.message} </p>
+
           <br />
           <br />
 
@@ -57,14 +74,9 @@ export default function SignUp() {
             type="password"
             id="myPassWord"
             placeholder="8자 이상"
-            {...register("password", { required: true, minLength: 8 })}
+            {...register("password")}
           />
-          {errors.password?.type === "required" && (
-            <p>비밀번호를 입력해 주세요!</p>
-          )}
-          {errors.password?.type === "minLength" && (
-            <p>최소 8자이상 입력해주세요!</p>
-          )}
+          <p> {errors.password?.message} </p>
           <br />
           <br />
 
@@ -73,17 +85,11 @@ export default function SignUp() {
             type="password"
             id="myPassWord"
             placeholder="비밀번호 확인"
-            {...register("password_confirm", {
-              required: true,
-              validate: (value) =>
-                value === watch("password") ? true : "비밀번호를 확인해주세요",
-            })}
+            {...register("password_confirm")}
           />
+          <p> {errors.password_confirm?.message} </p>
 
           <button type="submit">회원가입</button>
-          {errors.password_confirm && (
-            <p> {errors.password_confirm.message} </p>
-          )}
         </fieldset>
       </form>
     </>
