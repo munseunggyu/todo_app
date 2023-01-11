@@ -12,7 +12,7 @@ const NavContainer = styled.nav`
     line-height: 16px;
   }
 
-  h1 {
+  h1 a {
     color: white;
     font-size: 24px;
     font-weight: 700;
@@ -30,7 +30,9 @@ const NavContainer = styled.nav`
 export default function Nav() {
   return (
     <NavContainer>
-      <h1>ToDoList</h1>
+      <h1>
+        <Link to="/">ToDoList</Link>
+      </h1>
       <ul>
         <li>
           <Link to="/login">로그인</Link>
