@@ -1,10 +1,11 @@
 import axios from "axios";
 import * as yup from "yup";
-import React from "react";
+import React, { useContext } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Nav from "../../common/Nav";
+import { AuthContext } from "../../context/userInfo";
 
 interface ISignUpForm {
   email: string;
@@ -32,6 +33,7 @@ const formSchema = yup.object({
 });
 
 export default function SignUp() {
+  const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
   const {
     register,
@@ -51,6 +53,7 @@ export default function SignUp() {
         console.log(res.data);
 
         localStorage.setItem("Access Token", res.data.token);
+        dispatch({ type: "login" });
         alert("회원가입이 완료되었습니다.");
         navigate("/");
       })
