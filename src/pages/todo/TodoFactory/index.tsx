@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { HomeContainer } from "../../../common/MainContainer";
 import Nav from "../../../common/Nav";
 import { AuthContext } from "../../../context/userInfo";
+import { ICreateTodo } from "../todo.types";
 
 const FactoryInputContainer = styled.form`
   margin-top: 78px;
@@ -46,15 +47,11 @@ const SubmtiBtn = styled.input`
   color: #fff;
   border: 0;
 `;
-interface ITodo {
-  title: string;
-  content: string;
-}
 
 export default function TodoFactory() {
   const { state } = useContext(AuthContext);
-  const { register, handleSubmit } = useForm<ITodo>();
-  const handleCreateTodo = async (data: ITodo) => {
+  const { register, handleSubmit } = useForm<ICreateTodo>();
+  const handleCreateTodo = async (data: ICreateTodo) => {
     await axios
       .post(
         `${process.env.REACT_APP_API_KEY}/todos`,
@@ -78,6 +75,7 @@ export default function TodoFactory() {
           <TodoTitle
             type="text"
             {...register("title")}
+            // defaultValue={""}
             placeholder="제목을 입력해주세요."
             required
           />

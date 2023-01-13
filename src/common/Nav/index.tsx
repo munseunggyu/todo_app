@@ -39,7 +39,6 @@ export default function Nav() {
     alert("로그아웃 되었습니다.");
   };
   const location = useLocation();
-  console.log(location.pathname);
 
   return (
     <NavContainer>
