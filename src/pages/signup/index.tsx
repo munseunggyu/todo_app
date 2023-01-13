@@ -1,11 +1,8 @@
-import axios from "axios";
 import * as yup from "yup";
-import React, { useContext } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import Nav from "../../common/Nav";
-import { AuthContext } from "../../context/userInfo";
+import { useSgin } from "../../hooks/useSgin";
 
 interface ISignUpForm {
   email: string;
@@ -33,8 +30,6 @@ const formSchema = yup.object({
 });
 
 export default function SignUp() {
-  const { dispatch } = useContext(AuthContext);
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -42,23 +37,11 @@ export default function SignUp() {
   } = useForm<ISignUpForm>({
     resolver: yupResolver(formSchema),
   });
+  const { handleSgin: handleSignUp } = useSgin(
+    "/users/create",
+    "회원가입이 완료되었습니다."
+  );
 
-  const handleSignUp = async (data: ISignUpForm) => {
-    await axios
-      .post(`http://localhost:8080/users/create`, {
-        email: data.email,
-        password: data.password,
-      })
-      .then((res) => {
-        console.log(res.data);
-
-        localStorage.setItem("Access Token", res.data.token);
-        dispatch({ type: "login" });
-        alert("회원가입이 완료되었습니다.");
-        navigate("/");
-      })
-      .catch((error) => alert(error.response.data.details));
-  };
   return (
     <>
       <Nav />

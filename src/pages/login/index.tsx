@@ -1,11 +1,8 @@
-import axios from "axios";
 import * as yup from "yup";
-import React, { useContext } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import Nav from "../../common/Nav";
-import { AuthContext } from "../../context/userInfo";
+import { useSgin } from "../../hooks/useSgin";
 
 interface ILoginForm {
   email: string;
@@ -21,16 +18,14 @@ const formSchema = yup.object({
     .string()
     .required("영문, 숫자포함 8자리를 입력해주세요.")
     .min(8, "최소 8자 이상 가능합니다")
-    .max(15, "최대 15자 까지만 가능합니다")
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/,
-      "영문 숫자포함 8자리를 입력해주세요."
-    ),
+    .max(15, "최대 15자 까지만 가능합니다"),
+  // .matches(
+  //   /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/,
+  //   "영문 숫자포함 8자리를 입력해주세요."
+  // ),
 });
 
 export default function Login() {
-  const { dispatch } = useContext(AuthContext);
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -38,25 +33,15 @@ export default function Login() {
   } = useForm<ILoginForm>({
     resolver: yupResolver(formSchema),
   });
+  const { handleSgin: handleSignIn } = useSgin(
+    "/users/login",
+    "로그인이 완료되었습니다."
+  );
 
-  const handleSignUp = async (data: ILoginForm) => {
-    await axios
-      .post(`http://localhost:8080/users/login`, {
-        email: data.email,
-        password: data.password,
-      })
-      .then((res) => {
-        localStorage.setItem("Access Token", res.data.token);
-        dispatch({ type: "login" });
-        alert("로그인이 완료되었습니다.");
-        navigate("/");
-      })
-      .catch((error) => alert(error.response.data.details));
-  };
   return (
     <>
       <Nav />
-      <form onSubmit={handleSubmit(handleSignUp)}>
+      <form onSubmit={handleSubmit(handleSignIn)}>
         <fieldset>
           <legend>로그인</legend>
 
