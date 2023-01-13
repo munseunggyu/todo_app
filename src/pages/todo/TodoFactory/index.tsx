@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { ReactEventHandler, useContext, useState } from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { HomeContainer } from "../../../common/MainContainer";
 import Nav from "../../../common/Nav";
@@ -45,19 +46,21 @@ const SubmtiBtn = styled.input`
   color: #fff;
   border: 0;
 `;
+interface ITodo {
+  title: string;
+  content: string;
+}
 
 export default function TodoFactory() {
   const { state } = useContext(AuthContext);
-  const [title, setTItle] = useState("");
-  const [content, setContent] = useState("");
-  const handleCreateTodo = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const { register, handleSubmit } = useForm<ITodo>();
+  const handleCreateTodo = async (data: ITodo) => {
     await axios
       .post(
         `${process.env.REACT_APP_API_KEY}/todos`,
         {
-          title: title,
-          content: content,
+          title: data.title,
+          content: data.content,
         },
         {
           headers: {
@@ -71,17 +74,15 @@ export default function TodoFactory() {
     <>
       <Nav />
       <HomeContainer>
-        <FactoryInputContainer onSubmit={handleCreateTodo}>
+        <FactoryInputContainer onSubmit={handleSubmit(handleCreateTodo)}>
           <TodoTitle
             type="text"
-            value={title}
-            onChange={(e) => setTItle(e.target.value)}
+            {...register("title")}
             placeholder="제목을 입력해주세요."
             required
           />
           <TodoContent
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            {...register("content")}
             placeholder="내용을 입력해주세요."
             required
           />
