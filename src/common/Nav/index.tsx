@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { AuthContext } from "../../context/userInfo";
 
 const NavContainer = styled.nav`
-  background-color: royalblue;
+  background-color: #202539;
   padding: 20px 50px;
   color: white;
   ul {

@@ -32,18 +32,37 @@ const TodoLi = styled.li`
 export default function TodoLayOut() {
   const { state } = useContext(AuthContext);
   const [todoList, setTodoList] = useState<ITodo[]>([]);
-  const [isLoading, setIsLoading] = useState<Boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
   const getTodoList = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API_KEY}/todos`, {
+    try {
+      const todos = await axios.get(`${process.env.REACT_APP_API_KEY}/todos`, {
         headers: {
           Authorization: state.token,
         },
-      })
-      .then((res) => {
-        setTodoList(res.data.data);
-        setIsLoading(false);
       });
+      setTodoList(todos.data.data);
+      setIsLoading(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
+    }
+  };
+  const handleDelTodo = async (todoId: string) => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_KEY}/todos/${todoId}`, {
+        headers: {
+          Authorization: state.token,
+        },
+      });
+      setTodoList((prev) => {
+        return prev.filter((todo) => todo.id !== todoId);
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
+    }
   };
 
   useEffect(() => {
@@ -59,7 +78,7 @@ export default function TodoLayOut() {
               <p>내용: {todo.content} </p>
               <div>
                 <button>수정</button>
-                <button>삭제</button>
+                <button onClick={() => handleDelTodo(todo.id)}>삭제</button>
               </div>
             </TodoLi>
           ))}

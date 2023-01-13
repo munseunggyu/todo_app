@@ -1,4 +1,5 @@
 import React, { createContext, ReactNode, useEffect, useReducer } from "react";
+import { useState } from "react";
 
 interface IChildren {
   children: ReactNode;
@@ -20,12 +21,12 @@ const initialState: IState = {
   token: null,
   isAuthReady: false,
 };
-
-// context 객체를 생성합니다.
-const AuthContext = createContext<IContext>({
+const intialContext = {
   state: initialState,
   dispatch: () => null,
-});
+};
+// context 객체를 생성합니다.
+const AuthContext = createContext<IContext>(intialContext);
 
 const authReducer = (state: IState, action: IAuthAction): IState => {
   switch (action.type) {
@@ -42,7 +43,6 @@ const authReducer = (state: IState, action: IAuthAction): IState => {
 
 const AuthContextProvider = ({ children }: IChildren) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-
   useEffect(() => {
     if (localStorage.getItem("Access Token")) {
       dispatch({

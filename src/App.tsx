@@ -6,9 +6,8 @@ import { AuthContextProvider } from "./context/userInfo";
 function App() {
   const GlobalStyle = createGlobalStyle`
   ${reset}
-  *{
+  body{
   box-sizing: border-box;
-
   }
   button{
     cursor: pointer;
@@ -17,6 +16,7 @@ function App() {
   }
   a{
     color:black;
+    background-color: transparent;
     text-decoration:none;
   }
 `;
