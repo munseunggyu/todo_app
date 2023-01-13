@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { ReactEventHandler, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { HomeContainer } from "../../../common/MainContainer";
 import Nav from "../../../common/Nav";
@@ -51,21 +52,21 @@ const SubmtiBtn = styled.input`
 export default function TodoFactory() {
   const { state } = useContext(AuthContext);
   const { register, handleSubmit } = useForm<ICreateTodo>();
+  const navigate = useNavigate();
   const handleCreateTodo = async (data: ICreateTodo) => {
-    await axios
-      .post(
-        `${process.env.REACT_APP_API_KEY}/todos`,
-        {
-          title: data.title,
-          content: data.content,
+    await axios.post(
+      `${process.env.REACT_APP_API_KEY}/todos`,
+      {
+        title: data.title,
+        content: data.content,
+      },
+      {
+        headers: {
+          Authorization: state.token,
         },
-        {
-          headers: {
-            Authorization: state.token,
-          },
-        }
-      )
-      .then((res) => console.log(res));
+      }
+    );
+    navigate("/");
   };
   return (
     <>
