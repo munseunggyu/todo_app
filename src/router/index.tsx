@@ -4,7 +4,7 @@ import { AuthContext } from "../context/userInfo";
 import Home from "../pages/Home";
 import Login from "../pages/login";
 import SignUp from "../pages/signup";
-import Todo from "../pages/todo";
+import TodoFactory from "../pages/todo/TodoFactory";
 
 export default function Router() {
   const { state, dispatch } = useContext(AuthContext);
@@ -12,14 +12,16 @@ export default function Router() {
   return (
     <Routes>
       {state.token ? (
-        <Route path="/" element={<Home />} />
+        <>
+          <Route path="/" element={<Home />} />
+          <Route path="todofactory" element={<TodoFactory />} />
+        </>
       ) : (
         <>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
         </>
       )}
-      {/* <Route path="todolist" element={<Todo />} /> */}
     </Routes>
   );
 }

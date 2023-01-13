@@ -6,6 +6,10 @@ import { AuthContextProvider } from "./context/userInfo";
 function App() {
   const GlobalStyle = createGlobalStyle`
   ${reset}
+  *{
+  box-sizing: border-box;
+
+  }
   button{
     cursor: pointer;
     border:0;

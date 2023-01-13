@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { AuthContext } from "../../context/userInfo";
 
@@ -11,21 +11,23 @@ const NavContainer = styled.nav`
     display: flex;
     justify-content: right;
     gap: 16px;
+    align-items: center;
     line-height: 16px;
+    font-size: 14px;
   }
 
   h1 a {
     color: white;
     font-size: 24px;
-    font-weight: 700;
   }
   a {
     color: white;
     font-size: 14px;
   }
   button {
-    font-size: 14px;
     color: white;
+    font-size: 14px;
+    padding: 0;
   }
 `;
 
@@ -36,6 +38,8 @@ export default function Nav() {
     localStorage.removeItem("Access Token");
     alert("로그아웃 되었습니다.");
   };
+  const location = useLocation();
+  console.log(location.pathname);
 
   return (
     <NavContainer>
@@ -44,9 +48,16 @@ export default function Nav() {
       </h1>
       <ul>
         {state.token ? (
-          <li>
-            <button onClick={logOut}>로그아웃</button>
-          </li>
+          <>
+            <li>
+              {!location.pathname.includes("todofactory") && (
+                <Link to="/todofactory">작성하기</Link>
+              )}
+            </li>
+            <li>
+              <button onClick={logOut}>로그아웃</button>
+            </li>
+          </>
         ) : (
           <>
             <li>
@@ -57,9 +68,6 @@ export default function Nav() {
             </li>
           </>
         )}
-        {/* <li>
-          <button>로그아웃</button>
-        </li> */}
       </ul>
     </NavContainer>
   );
