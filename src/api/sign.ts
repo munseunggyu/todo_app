@@ -1,4 +1,4 @@
-import { apiInstance } from "./apiInstance";
+import { api } from "./api";
 
 interface Ilogin {
   message: string;
@@ -6,7 +6,7 @@ interface Ilogin {
 }
 
 export const sign = async (url: string, email: string, password: string) => {
-  const response = await apiInstance.post<Ilogin>(url, {
+  const response = await api.post<Ilogin>(url, {
     email,
     password,
   });

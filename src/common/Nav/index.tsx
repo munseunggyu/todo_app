@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { AuthContext } from "../../context/userInfo";
+import { AuthContext } from "../../context/AuthContext";
 
 const NavContainer = styled.nav`
   background-color: #202539;

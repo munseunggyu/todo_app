@@ -1,11 +1,10 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { AuthContext } from "../../../context/userInfo";
+import { api } from "../../../api/api";
 import { ITodo } from "../todo.types";
 
 const TodoUl = styled.ul`
-  margin-top: 10px;
+  padding: 10px;
   width: 100%;
 `;
 const TodoLi = styled.li`
@@ -30,16 +29,11 @@ const TodoLi = styled.li`
 `;
 
 export default function TodoLayOut() {
-  const { state } = useContext(AuthContext);
   const [todoList, setTodoList] = useState<ITodo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const getTodoList = async () => {
     try {
-      const todos = await axios.get(`${process.env.REACT_APP_API_KEY}/todos`, {
-        headers: {
-          Authorization: state.token,
-        },
-      });
+      const todos = await api.get(`todos`);
       setTodoList(todos.data.data);
       setIsLoading(false);
     } catch (error) {
@@ -50,11 +44,7 @@ export default function TodoLayOut() {
   };
   const handleDelTodo = async (todoId: string) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_KEY}/todos/${todoId}`, {
-        headers: {
-          Authorization: state.token,
-        },
-      });
+      await api.delete(`todos/${todoId}`);
       setTodoList((prev) => {
         return prev.filter((todo) => todo.id !== todoId);
       });

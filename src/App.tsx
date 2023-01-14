@@ -2,7 +2,7 @@ import React from "react";
 import Router from "./router";
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
-import { AuthContextProvider } from "./context/userInfo";
+import { AuthContextProvider } from "./context/AuthContext";
 function App() {
   const GlobalStyle = createGlobalStyle`
   ${reset}

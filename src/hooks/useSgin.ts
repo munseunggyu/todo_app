@@ -1,8 +1,8 @@
 import { AxiosError } from "axios";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { sign } from "../api/auth";
-import { AuthContext } from "../context/userInfo";
+import { sign } from "../api/sign";
+import { AuthContext } from "../context/AuthContext";
 
 interface ISgin {
   email: string;
