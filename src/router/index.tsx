@@ -14,7 +14,8 @@ export default function Router() {
       {state.token ? (
         <>
           <Route path="/" element={<Home />} />
-          <Route path="todofactory" element={<TodoFactory />} />
+          <Route path="/todofactory" element={<TodoFactory />} />
+          <Route path="/todoedit/:id" element={<TodoFactory />} />
         </>
       ) : (
         <>

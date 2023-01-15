@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { api } from "../../../api/api";
 import { HomeContainer } from "../../../common/MainContainer";
@@ -49,14 +49,28 @@ const SubmtiBtn = styled.input`
 
 export default function TodoFactory() {
   const { register, handleSubmit } = useForm<ICreateTodo>();
+  const location = useLocation();
+  const isEdit = location.state;
   const navigate = useNavigate();
   const handleCreateTodo = async (data: ICreateTodo) => {
-    await api.post(`todos`, {
-      title: data.title,
-      content: data.content,
-    });
-    navigate("/");
+    try {
+      const todoData = {
+        title: data.title,
+        content: data.content,
+      };
+      if (isEdit) {
+        await api.put(`todos/${isEdit.id}`, todoData);
+      } else {
+        await api.post(`todos`, todoData);
+      }
+      navigate("/");
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error);
+      }
+    }
   };
+
   return (
     <>
       <Nav />
@@ -65,12 +79,13 @@ export default function TodoFactory() {
           <TodoTitle
             type="text"
             {...register("title")}
-            // defaultValue={""}
+            defaultValue={isEdit ? isEdit.title : ""}
             placeholder="제목을 입력해주세요."
             required
           />
           <TodoContent
             {...register("content")}
+            defaultValue={isEdit ? isEdit.content : ""}
             placeholder="내용을 입력해주세요."
             required
           />

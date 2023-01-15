@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { api } from "../../../api/api";
 import { ITodo } from "../todo.types";
@@ -31,6 +32,7 @@ const TodoLi = styled.li`
 export default function TodoLayOut() {
   const [todoList, setTodoList] = useState<ITodo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
   const getTodoList = async () => {
     try {
       const todos = await api.get(`todos`);
@@ -67,7 +69,19 @@ export default function TodoLayOut() {
               <strong>제목: {todo.title}</strong>
               <p>내용: {todo.content} </p>
               <div>
-                <button>수정</button>
+                <button
+                  onClick={() =>
+                    navigate(`/todoedit/${todo.id}`, {
+                      state: {
+                        id: todo.id,
+                        title: todo.title,
+                        content: todo.content,
+                      },
+                    })
+                  }
+                >
+                  수정
+                </button>
                 <button onClick={() => handleDelTodo(todo.id)}>삭제</button>
               </div>
             </TodoLi>
