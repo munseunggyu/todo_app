@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sign } from "../api/sign";
 import { AuthContext } from "../context/AuthContext";
@@ -12,6 +12,7 @@ interface ISgin {
 export const useSgin = (url: string, message: string) => {
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [error, setError] = useState();
 
   const handleSgin = async (data: ISgin) => {
     try {
@@ -21,12 +22,11 @@ export const useSgin = (url: string, message: string) => {
       alert(message);
       navigate("/");
     } catch (error) {
-      const { response } = error as unknown as AxiosError;
-      if (response) {
-        throw { status: response.status, data: response.data };
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data.details);
+        setError(error.response?.data.details);
       }
-      throw error;
     }
   };
-  return { handleSgin };
+  return { handleSgin, error };
 };

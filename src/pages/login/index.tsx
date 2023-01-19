@@ -33,7 +33,7 @@ export default function Login() {
   } = useForm<ILoginForm>({
     resolver: yupResolver(formSchema),
   });
-  const { handleSgin: handleSignIn } = useSgin(
+  const { handleSgin: handleSignIn, error } = useSgin(
     "/users/login",
     "로그인이 완료되었습니다."
   );
@@ -62,6 +62,7 @@ export default function Login() {
           />
           <button type="submit">로그인</button>
           <p> {errors.password?.message} </p>
+          {error && <p> 아이디 또는 비밀번호가 일치하지 않습니다. </p>}
           <br />
           <br />
         </fieldset>
