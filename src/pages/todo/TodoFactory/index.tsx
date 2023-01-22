@@ -18,8 +18,9 @@ const TodoTitle = styled.input`
   width: 100%;
   flex-grow: 1;
   height: 40px;
-  padding: 15px;
-  border: 1px solid #04aaff;
+  padding: 8px 15px;
+  box-sizing: border-box;
+  border: 1px solid #202539;
   border-radius: 8px;
   font-weight: 500;
   font-size: 12px;
@@ -28,23 +29,24 @@ const TodoTitle = styled.input`
 const TodoContent = styled.textarea`
   width: 100%;
   flex-grow: 1;
+  box-sizing: border-box;
   height: 300px;
   padding: 15px;
-  border: 1px solid #04aaff;
+  border: 1px solid #202539;
   border-radius: 8px;
   font-weight: 500;
   font-size: 12px;
 `;
 
-const SubmtiBtn = styled.input`
-  background-color: #04aaff;
-  padding: 10px 0;
+const SubmtiBtn = styled.button`
+  background-color: #202539;
   font-size: 20px;
   font-weight: 700;
-  text-align: center;
+  width: 100%;
   border-radius: 5px;
   color: #fff;
   border: 0;
+  height: 40px;
 `;
 
 export default function TodoFactory() {
@@ -89,7 +91,7 @@ export default function TodoFactory() {
             placeholder="내용을 입력해주세요."
             required
           />
-          <SubmtiBtn type="submit" value="Todo" />
+          <SubmtiBtn type="submit">Todo</SubmtiBtn>
         </FactoryInputContainer>
       </HomeContainer>
     </>
