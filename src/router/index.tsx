@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Home from "../pages/Home";
@@ -7,7 +7,7 @@ import SignUp from "../pages/signup";
 import TodoFactory from "../pages/todo/TodoFactory";
 
 export default function Router() {
-  const { state, dispatch } = useContext(AuthContext);
+  const { state } = useContext(AuthContext);
 
   return (
     <Routes>
